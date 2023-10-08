@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 867739786}
   - component: {fileID: 867739787}
   m_Layer: 0
-  m_Name: Player2D
+  m_Name: PlayerSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
