@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     // VARIABLES ---------------------------------------------------------------
-    [SerializeField] private Vector3 speed = new(2f, 0f, 2f); // new (X, Y, Z)
+    [SerializeField] private Vector3 speed = new(2f, 1f, 2f); // new (X, Y, Z)
     private Rigidbody rb;
     private Animator animator;
     private Vector2 moveDir;
@@ -33,9 +33,9 @@ public class PlayerMovement : MonoBehaviour
 
 
         rb.velocity = new Vector3(
-            moveDir.x * speed.x,// This is the X axis
-            0f * speed.y,// This is the Y axis
-            moveDir.y * speed.z // This is the Z axis
+            moveDir.x     * speed.x,// This is the X axis - moveDir is 2D
+            rb.velocity.y * speed.y,// This is the Y axis - keeps gravity
+            moveDir.y     * speed.z // This is the Z axis - moveDir is 2D
         );
     }
 
