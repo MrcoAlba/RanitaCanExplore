@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector3 speed = new(2f, 1f, 2f); // new (X, Y, Z)
     private Rigidbody rb;
     private Animator animator;
+    private PlayerInput playerInput;
     private Vector2 moveDir;
     #endregion
 
@@ -17,12 +18,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     // Reference components from other script
     void Start()
     {
-
+        DialogueManager.Instance.OnDialogueStart += OnDialogueStartDelegate;
+        DialogueManager.Instance.OnDialogueFinish += OnDialogueFinishDelegate;
     }
 
     // Update is called once per frame
@@ -33,6 +36,16 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity.y * speed.y,// This is the Y axis - keeps gravity
             moveDir.y     * speed.z // This is the Z axis - moveDir is 2D
         );
+    }
+
+    private void OnDialogueStartDelegate(Interaction interaction) {
+        // Change input map to dialogue mode
+        playerInput.SwitchCurrentActionMap("Dialogue");
+    }
+
+    private void OnDialogueFinishDelegate() {
+        // Change input map to player mode
+        playerInput.SwitchCurrentActionMap("Player");
     }
 
     private void OnMovement(InputValue value)
@@ -58,6 +71,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+    private void OnNextInteraction(InputValue value)
+    {
+        if (value.isPressed){
+            // Next dialogue
+            DialogueManager.Instance.NextDialogue();
+        }
+    }
+
 
     private void OnCollisionEnter(Collision other) {
         Dialogue dialogue = other.collider.transform.GetComponent<Dialogue>();
