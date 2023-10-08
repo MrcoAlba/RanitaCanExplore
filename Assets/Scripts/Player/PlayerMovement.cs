@@ -5,14 +5,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // VARIABLES ---------------------------------------------------------------
+    #region Variables
     [SerializeField] private Vector3 speed = new(2f, 1f, 2f); // new (X, Y, Z)
     private Rigidbody rb;
     private Animator animator;
     private Vector2 moveDir;
-    // VARIABLES ---------------------------------------------------------------
-
-
+    #endregion
 
     // Reference components from this script
     private void Awake()
@@ -30,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         rb.velocity = new Vector3(
             moveDir.x     * speed.x,// This is the X axis - moveDir is 2D
             rb.velocity.y * speed.y,// This is the Y axis - keeps gravity
@@ -61,6 +57,14 @@ public class PlayerMovement : MonoBehaviour
             // was going to set the idle direction animation
         }
 
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        Dialogue dialogue = other.collider.transform.GetComponent<Dialogue>();
+        if(dialogue!=null){
+            // Start dialogue
+            DialogueManager.Instance.StartDialogue(dialogue);
+        }
     }
 
 }
