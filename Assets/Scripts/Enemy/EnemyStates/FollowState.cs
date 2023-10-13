@@ -26,6 +26,28 @@ public class FollowState : EnemyState
                 return new IdleState(enemyController); 
             }
         );
+        transitions.Add(transitionFollowToIdle);
+
+        Transition transitionFollowToAttack = new Transition(
+            isValid: () => {
+                float distance = Vector3.Distance(
+                    enemyController.Player.position,
+                    enemyController.transform.position
+                    );
+                if (distance >= enemyController.distanceToAttack)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            },
+            getNextState: () => {
+                return new AttackState(enemyController);
+            }
+        );
+        transitions.Add(transitionFollowToAttack);
     }
 
     public override void OnStart()

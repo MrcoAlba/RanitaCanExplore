@@ -6,15 +6,17 @@ public class AttackState : EnemyState
 {
     public AttackState(EnemyController enemyController) : base(enemyController)
     {
+
     }
 
     public override void OnStart()
     {
         Debug.Log("OnStart AttackState");
+        enemyController.Fire();
     }
     public override void OnUpdate()
     {
-        //Debug.Log("OnUpdate AttackState");
+        
     }
     public override void OnFinish()
     {

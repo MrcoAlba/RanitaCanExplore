@@ -16,9 +16,12 @@ public class EnemyController : MonoBehaviour
 
     // Reference to the object
     public Transform Player;
+    public GameObject prefabStone;
+    public Transform FirePoint;
     public Rigidbody rb {private set; get;}
     // Distance to start following
-    public float distanceToFollow;
+    public float distanceToFollow = 4f;
+    public float distanceToAttack = 3f;
     public float speed = 1f;
 
     private void Awake()
@@ -51,6 +54,12 @@ public class EnemyController : MonoBehaviour
             }
         }
         currentState.OnUpdate();
+    }
+
+    public void Fire() {
+        GameObject stone = Instantiate(prefabStone, FirePoint.position, Quaternion.identity);
+        stone.GetComponent<StoneMovement>().stoneDirection = (Player.position - transform.position).normalized;
+
     }
 
 }
