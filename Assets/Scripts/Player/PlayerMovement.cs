@@ -6,11 +6,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private Vector3 speed = new(2f, 1f, 2f); // new (X, Y, Z)
+    [SerializeField] private Vector3 moveSpeed = new(2f, 1f, 2f); // new (X, Y, Z)
+    [SerializeField] private Vector3 jumpSpeed = new(1f, 3f, 1f); // new (X, Y, Z)
     private Rigidbody rb;
     private Animator animator;
     private PlayerInput playerInput;
     private Vector2 moveDir;
+    private bool isJumping;
     #endregion
 
     // Reference components from this script
@@ -32,18 +34,20 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         rb.velocity = new Vector3(
-            moveDir.x     * speed.x,// This is the X axis - moveDir is 2D
-            rb.velocity.y * speed.y,// This is the Y axis - keeps gravity
-            moveDir.y     * speed.z // This is the Z axis - moveDir is 2D
+            moveDir.x     * moveSpeed.x,// This is the X axis - moveDir is 2D
+            rb.velocity.y * moveSpeed.y,// This is the Y axis - keeps gravity
+            moveDir.y     * moveSpeed.z // This is the Z axis - moveDir is 2D
         );
     }
 
-    private void OnDialogueStartDelegate(Interaction interaction) {
+    private void OnDialogueStartDelegate(Interaction interaction)
+    {
         // Change input map to dialogue mode
         playerInput.SwitchCurrentActionMap("Dialogue");
     }
 
-    private void OnDialogueFinishDelegate() {
+    private void OnDialogueFinishDelegate()
+    {
         // Change input map to player mode
         playerInput.SwitchCurrentActionMap("Player");
     }
@@ -72,20 +76,41 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    private void OnJumping()
+    {
+        Debug.Log("HOLI, SALTO :)");
+        if (!isJumping)
+        {
+            rb.velocity = new Vector3(
+                        moveDir.x * jumpSpeed.y,// This is the X axis - keeps velocity
+                        jumpSpeed.y            ,// This is the Y axis
+                        moveDir.y * jumpSpeed.z // This is the Z axis - keeps velocity
+                    );
+            isJumping = true;
+        }
+    }
+
     private void OnNextInteraction(InputValue value)
     {
-        if (value.isPressed){
+        if (value.isPressed)
+        {
             // Next dialogue
             DialogueManager.Instance.NextDialogue();
         }
     }
 
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnCollisionEnter(Collision other)
+    {
         Dialogue dialogue = other.collider.transform.GetComponent<Dialogue>();
-        if(dialogue!=null){
+        if (dialogue != null)
+        {
             // Start dialogue
             DialogueManager.Instance.StartDialogue(dialogue);
+        }
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
         }
     }
 

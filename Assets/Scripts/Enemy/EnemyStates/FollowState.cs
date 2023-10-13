@@ -44,6 +44,7 @@ public class FollowState : EnemyState
                 }
             },
             getNextState: () => {
+                // return enemyController.attackState;
                 return new AttackState(enemyController);
             }
         );
