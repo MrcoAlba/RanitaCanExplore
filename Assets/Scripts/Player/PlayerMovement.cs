@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private Vector3 speed = new(2f, 1f, 2f); // new (X, Y, Z)
+    [SerializeField] private Vector3 moveSpeed = new(2f, 1f, 2f); // new (X, Y, Z)
+    [SerializeField] private Vector3 jumpSpeed = new(1f, 3f, 1f); // new (X, Y, Z)
     private Rigidbody rb;
     private Animator animator;
     private PlayerInput playerInput;
@@ -29,10 +30,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject enemyBody;
     [SerializeField] private GameObject enemyHealthBar;
 
+    [SerializeField] private GameObject playerHealthBar;
+
     private float pushTimer=0f;
 
     private bool attacked=false;
 
+
+    private bool isJumping;
     #endregion
 
     // Reference components from this script
@@ -54,11 +59,15 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(playerHealthBar.GetComponent<Slider>().value<=0){
+            gameObject.SetActive(false);
+        }
+
         if(attackMenuUi.GetComponent<AttackMenuUI>().isMenuOpen==false){
             rb.velocity = new Vector3(
-            moveDir.x     * speed.x,// This is the X axis - moveDir is 2D
-            rb.velocity.y * speed.y,// This is the Y axis - keeps gravity
-            moveDir.y     * speed.z // This is the Z axis - moveDir is 2D
+            moveDir.x     * moveSpeed.x,// This is the X axis - moveDir is 2D
+            rb.velocity.y * moveSpeed.y,// This is the Y axis - keeps gravity
+            moveDir.y     * moveSpeed.z // This is the Z axis - moveDir is 2D
         );
         }
 
@@ -86,11 +95,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void OnDialogueStartDelegate(Interaction interaction) {
-        // Change input map to dialogue mode
         playerInput.SwitchCurrentActionMap("Dialogue");
     }
 
-    private void OnDialogueFinishDelegate() {
+    private void OnDialogueFinishDelegate()
+    {
         // Change input map to player mode
         playerInput.SwitchCurrentActionMap("Player");
     }
@@ -133,12 +142,26 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsAttacking2", true);
             attackDmg=4;
         }
-        
+    }
+
+    private void OnJumping()
+    {
+        Debug.Log("HOLI, SALTO :)");
+        if (!isJumping)
+        {
+            rb.velocity = new Vector3(
+                        moveDir.x * jumpSpeed.y,// This is the X axis - keeps velocity
+                        jumpSpeed.y            ,// This is the Y axis
+                        moveDir.y * jumpSpeed.z // This is the Z axis - keeps velocity
+                    );
+            isJumping = true;
+        }
     }
 
     private void OnNextInteraction(InputValue value)
     {
-        if (value.isPressed){
+        if (value.isPressed)
+        {
             // Next dialogue
             DialogueManager.Instance.NextDialogue();
         }
@@ -159,6 +182,10 @@ public class PlayerMovement : MonoBehaviour
             pushTimer=0.4f;
             attacked=true;
         }
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+        }
     }
 
     private void pushEnemy(){
@@ -172,21 +199,20 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void moveEnemy(int force){
-        if(moveDir.x!=0){
-            if(moveDir.x>0){
-                enemyBody.GetComponent<Rigidbody>().AddForce(0,force,0,ForceMode.Impulse);
+            if(moveDir.x!=0){
+                if(moveDir.x>0){
+                    enemyBody.GetComponent<Rigidbody>().AddForce(0,force,0,ForceMode.Impulse);
+                }else{
+                    enemyBody.GetComponent<Rigidbody>().AddForce(0,-force,0,ForceMode.Impulse);
+                }
+            }else if(moveDir.y!=0){
+                if(moveDir.y>0){
+                    enemyBody.GetComponent<Rigidbody>().AddForce(force,0,0,ForceMode.Impulse);
+                }else{
+                    enemyBody.GetComponent<Rigidbody>().AddForce(-force,0,0,ForceMode.Impulse);
+                }
             }else{
-                enemyBody.GetComponent<Rigidbody>().AddForce(0,-force,0,ForceMode.Impulse);
+                enemyBody.GetComponent<Rigidbody>().AddForce(0,0,force,ForceMode.Impulse);
             }
-        }else if(moveDir.y!=0){
-            if(moveDir.y>0){
-                enemyBody.GetComponent<Rigidbody>().AddForce(force,0,0,ForceMode.Impulse);
-            }else{
-                enemyBody.GetComponent<Rigidbody>().AddForce(-force,0,0,ForceMode.Impulse);
-            }
-        }else{
-            enemyBody.GetComponent<Rigidbody>().AddForce(0,0,force,ForceMode.Impulse);
-        }
     }
-
 }
