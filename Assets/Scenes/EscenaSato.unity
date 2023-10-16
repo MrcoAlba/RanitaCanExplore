@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465788, g: 0.49641287, b: 0.5748173, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4497,7 +4497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -279.2809, y: -24.9714}
+  m_AnchoredPosition: {x: -279.28088, y: -24.971375}
   m_SizeDelta: {x: -586.7202, y: -240.9049}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &352739876
@@ -11293,13 +11293,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3058ea3901330409ba55bb2d0bb72b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 2, y: 0, z: 2}
+  moveSpeed: {x: 2, y: 1, z: 2}
+  jumpSpeed: {x: 1, y: 3, z: 1}
   dmgCanvas: {fileID: 927639350}
   dmgCanvasText: {fileID: 2098752765}
   dmgCanvasTimer: 0
   attackMenuUi: {fileID: 1560324681}
   enemyBody: {fileID: 1838046359}
   enemyHealthBar: {fileID: 1574652369}
+  playerHealthBar: {fileID: 1508910795}
 --- !u!95 &911894316
 Animator:
   serializedVersion: 5
