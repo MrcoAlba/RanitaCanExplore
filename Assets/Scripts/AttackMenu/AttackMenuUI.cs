@@ -45,6 +45,7 @@ public class AttackMenuUI : MonoBehaviour
 
     private void OnMenu(InputValue value)
     {
+        Debug.Log("ON MENU :)");
         if(value.isPressed){
             isMenuOpen = !isMenuOpen;
         }
@@ -52,6 +53,7 @@ public class AttackMenuUI : MonoBehaviour
 
     private void OnMenuUp(InputValue value)
     {
+        Debug.Log("DEBERÍA APARECER");
         if(value.isPressed && isMenuOpen){
             selection=0;
         }
@@ -59,6 +61,7 @@ public class AttackMenuUI : MonoBehaviour
 
     private void OnMenuDown(InputValue value)
     {
+        Debug.Log("DEBERÍA IRME");
         if(value.isPressed && isMenuOpen){
             selection=1;
         }
