@@ -208,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                ShootPoint.GetComponent<Gun>().FireGun();
                 dmgCanvasTimer = 1f;
                 animator.SetBool("IsAttacking1", false);
                 animator.SetBool("IsAttacking2", true);
