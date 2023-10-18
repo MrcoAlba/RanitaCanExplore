@@ -6,7 +6,7 @@ public class HitBoss : MonoBehaviour
 {
     public int damamge;
     // Start is called before the first frame update
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider    other)
     {
         if (other.gameObject.CompareTag("Player"))
         {

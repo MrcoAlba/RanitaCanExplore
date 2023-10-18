@@ -34,6 +34,7 @@ public class BossLogic : MonoBehaviour
 
 
     [Header("Boss Logic")]
+    public bool EmpezarAtacar = false;
     public int rutina;
     public float cronometro;
     public float time_rutinas;
@@ -57,21 +58,24 @@ public class BossLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        //barra.fillAmount = HP_min / HP_max;
-        if (HP_min > 0)
+        if (EmpezarAtacar == true)
         {
-            Vivo();
-        }
-        else
-        {
-            if (!muerto)
+            if (HP_min > 0)
             {
-                ani.SetTrigger("dead");
-                //music.enabled = false;
-                muerto = true; 
+                Vivo();
+            }
+            else
+            {
+                if (!muerto)
+                {
+                    ani.SetTrigger("dead");
+                    //music.enabled = false;
+                    muerto = true;
+                }
             }
         }
+        //barra.fillAmount = HP_min / HP_max;
+        
     }
     public void Comportamiento()
     {
@@ -86,21 +90,47 @@ public class BossLogic : MonoBehaviour
         if (Vector3.Distance(transform.position, target.transform.position) > 1 && !atacando)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-            if (transform.rotation == rotation)
-            {
-                //transform.Translate(Vector3.forward * speed * Time.deltaTime);
-            }
+            
         }
         
-        if (Vector3.Distance(transform.position, target.transform.position) > 3 && Vector3.Distance(transform.position, target.transform.position) < 5)
+        if (Vector3.Distance(transform.position, target.transform.position) > 1.5f && Vector3.Distance(transform.position, target.transform.position) < 3)
         {
             ani.SetBool("Melee", false);
-            ani.SetBool("Fire", true);
+            //ani.SetBool("Fire", true);
+            ani.SetBool("Attack", false);
+            ani.SetTrigger("Fire");
+            ani.ResetTrigger("FireOut");
         }
-        else if (Vector3.Distance(transform.position, target.transform.position) < 3)
+        else if (Vector3.Distance(transform.position, target.transform.position) < 1.5f)
         {
             ani.SetBool("Melee", true);
-            ani.SetBool("Fire", false);
+            //ani.SetBool("Fire", false);
+            ani.SetBool("Attack", false);
+            ani.ResetTrigger("Fire");
+            ani.SetTrigger("FireOut");
+            Stop_Fire();
+        }
+        else if (Vector3.Distance(transform.position, target.transform.position) > 3 && Vector3.Distance(transform.position, target.transform.position) < 5)
+        {
+            //ani.SetBool("Fire", false);
+            ani.ResetTrigger("Fire");
+            ani.SetTrigger("FireOut");
+            Stop_Fire();
+            ani.SetBool("Melee", false);
+            ani.SetBool("Attack", true);
+        }
+        else if (Vector3.Distance(transform.position, target.transform.position) > 5)
+        {
+            //ani.SetBool("Fire", false);
+            ani.ResetTrigger("Fire");
+            ani.SetTrigger("FireOut");
+            ani.SetBool("Melee", false);
+            ani.SetBool("Attack", false);
+            /*if (transform.rotation == rotation)
+            {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            }*/
+
         }
         
     }

@@ -42,9 +42,6 @@ public class RangoBoss : MonoBehaviour
 
                     break;
             }
-            ani.SetBool("Walk", false);
-            ani.SetBool("Run", false);
-            ani.SetBool("Attack", true);
             boss.atacando = true;
             GetComponent<CapsuleCollider>().enabled = false;
         }
