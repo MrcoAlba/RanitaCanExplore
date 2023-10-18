@@ -252,4 +252,11 @@ public class BossLogic : MonoBehaviour
             }
         }
     }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.transform.CompareTag("Bullet")){
+            healthBar.GetComponent<Slider>().value -= 0.5f;
+            Debug.Log("HOLI ");
+        }
+    }
 }

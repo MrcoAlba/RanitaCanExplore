@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private PlayerInput playerInput;
     public Vector2 moveDir;
+    public Vector2 lastMoveDir;
     private Vector3 spawnPoint;
 
     // Damage related
@@ -116,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateShootPoint();
+        //RotateShootPoint();
         // If it's death, kill the player
         
         if (playerHealthBar.GetComponent<Slider>().value <= 0)
@@ -261,6 +262,14 @@ public class PlayerMovement : MonoBehaviour
         else if (other.gameObject.CompareTag("Respawn"))
         {
             this.transform.position = spawnPoint;
+        }
+    }
+
+    void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
         }
     }
 
