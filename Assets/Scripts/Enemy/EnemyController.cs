@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
     public Transform Player;
     public GameObject prefabStone;
     public Transform FirePoint;
-    public Rigidbody rb {private set; get;}
+    public Rigidbody rb { private set; get; }
     // Distance to start following
     public float distanceToFollow = 4f;
     public float distanceToAttack = 3f;
@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject playerBody;
     [SerializeField] private GameObject healthBar;
 
-    public int enemyHealthBar=10;
+    private float pushTimer = 0f;
 
     private void Awake()
     {
@@ -49,9 +49,24 @@ public class EnemyController : MonoBehaviour
     }
     private void Update()
     {
-        if(enemyHealthBar<=0){
+        
+        if (healthBar.GetComponent<Slider>().value <= 0.1)
+        {
+            Debug.Log("HOLI ESTOY AQUI");
             gameObject.SetActive(false);
         }
+        else{
+            Debug.Log("HOLI ADIOS:" + healthBar.GetComponent<Slider>().value);
+        }
+
+
+
+        if(pushTimer>0){
+            pushTimer -= Time.deltaTime;
+            pushEnemy();
+        }
+
+        
 
         foreach (var transition in currentState.transitions)
         {
@@ -67,7 +82,8 @@ public class EnemyController : MonoBehaviour
         currentState.OnUpdate();
     }
 
-    public void Fire() {
+    public void Fire()
+    {
         GameObject stone = Instantiate(prefabStone, FirePoint.position, Quaternion.identity);
         stone.GetComponent<StoneMovement>().stoneDirection = (Player.position - transform.position).normalized;
 
@@ -75,12 +91,55 @@ public class EnemyController : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if(other.transform.CompareTag("Player")){
-            if(playerBody.GetComponent<PlayerMovement>().dmgCanvasTimer<=0f){
-                healthBar.GetComponent<Slider>().value-=0.2f;
-                Debug.Log("oh no choco");
-            }
+        if (other.transform.CompareTag("Player") && playerBody.GetComponent<PlayerMovement>().dmgCanvasTimer > 0)
+        {
+            pushTimer = 2f;
+            healthBar.GetComponent<Slider>().value -= 0.2f;
+            pushEnemy();
         }
     }
 
+
+
+    private void pushEnemy()
+    {
+        if (playerBody.GetComponent<PlayerMovement>().attackOption == 0)
+        {
+            moveEnemy(2);
+        }
+        else if (playerBody.GetComponent<PlayerMovement>().attackOption == 1)
+        {
+            moveEnemy(6);
+        }
+    }
+
+    private void moveEnemy(int force)
+    {
+        if (playerBody.GetComponent<PlayerMovement>().moveDir.x != 0)
+        {
+            if (playerBody.GetComponent<PlayerMovement>().moveDir.x > 0)
+            {
+                rb.AddForce(0, force, 0, ForceMode.Impulse);
+            }
+            else
+            {
+                rb.AddForce(0, -force, 0, ForceMode.Impulse);
+            }
+        }
+        else if (playerBody.GetComponent<PlayerMovement>().moveDir.y != 0)
+        {
+            if (playerBody.GetComponent<PlayerMovement>().moveDir.y > 0)
+            {
+                rb.AddForce(force, 0, 0, ForceMode.Impulse);
+            }
+            else
+            {
+                rb.AddForce(-force, 0, 0, ForceMode.Impulse);
+            }
+        }
+        else
+        {
+            rb.AddForce(0, 0, force, ForceMode.Impulse);
+        }
+    }
 }

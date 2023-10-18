@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Animator animator;
     private PlayerInput playerInput;
-    private Vector2 moveDir;
+    public Vector2 moveDir;
     private Vector3 spawnPoint;
 
     // Damage related
@@ -25,16 +25,14 @@ public class PlayerMovement : MonoBehaviour
     // Attack related
     [SerializeField] private GameObject attackMenuUi;
     private int attackDmg = 2;
-    private int attackOption = 0;
+    public int attackOption = 0;
 
-    // Enemy related
-    [SerializeField] private GameObject enemyBody;
-    [SerializeField] private GameObject enemyHealthBar;
+    // // Enemy related
+    // [SerializeField] private GameObject enemyBody;
+    // [SerializeField] private GameObject enemyHealthBar;
 
     // Player life related
     [SerializeField] private GameObject playerHealthBar;
-
-    private float pushTimer = 0f;
 
     private bool attacked = false;
 
@@ -152,16 +150,6 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsAttacking1", false);
             animator.SetBool("IsAttacking2", false);
         }
-
-        if (pushTimer > 0f)
-        {
-            pushEnemy();
-            pushTimer -= Time.deltaTime;
-        }
-        else
-        {
-            attacked = false;
-        }
     }
 
     private void OnDialogueStartDelegate(Interaction interaction)
@@ -185,9 +173,12 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(moveDir.x) > Mathf.Epsilon ||
             Mathf.Abs(moveDir.y) > Mathf.Epsilon)
         {
-            animator.SetBool("IsWalking", true);
-            animator.SetBool("IsAttacking1", false);
-            animator.SetBool("IsAttacking2", false);
+            if (dmgCanvasTimer <= 0f)
+            {
+                animator.SetBool("IsWalking", true);
+                animator.SetBool("IsAttacking1", false);
+                animator.SetBool("IsAttacking2", false);
+            }
             animator.SetFloat("Horizontal", moveDir.x);
             animator.SetFloat("Vertical", moveDir.y);
         }
@@ -204,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnAttack(InputValue value)
     {
         // TODO JD: Add a cooldown
-        if (dmgCanvasTimer <= 0) 
+        if (dmgCanvasTimer <= 0)
         {
             if (attackOption == 0)
             {
@@ -256,21 +247,9 @@ public class PlayerMovement : MonoBehaviour
             DialogueManager.Instance.StartDialogue(dialogue);
         }
 
-        // TODO JD: Detectar colision en Enemy y bajar la vida desde ahí
-        // Quitar todas las referencias del ENEMY dentro de PLAYER
-        // Poner una referencia del PLAYER dentro del ENEMY
-        if (other.transform.CompareTag("Enemy") && dmgCanvasTimer > 0)
+        if (other.transform.CompareTag("Enemy") && dmgCanvasTimer <= 0)
         {
-            enemyBody.GetComponent<EnemyController>().enemyHealthBar -= attackDmg;
-            enemyHealthBar.GetComponent<Slider>().value -= (attackDmg / 10f);
-            pushTimer = 0.4f;
-        }
-        
-        
-        else if (other.transform.CompareTag("Enemy"))
-        {
-            pushTimer = 0.4f;
-            attacked = false;
+            playerHealthBar.GetComponent<Slider>().value -= 0.2f;
         }
         if (other.gameObject.CompareTag("Ground"))
         {
@@ -290,48 +269,5 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void pushEnemy()
-    {
-        if (attacked)
-        {
-            if (attackOption == 0)
-            {
-                moveEnemy(2);
-            }
-            else if (attackOption == 1)
-            {
-                moveEnemy(6);
-            }
-        }
-    }
 
-    private void moveEnemy(int force)
-    {
-        if (moveDir.x != 0)
-        {
-            if (moveDir.x > 0)
-            {
-                enemyBody.GetComponent<Rigidbody>().AddForce(0, force, 0, ForceMode.Impulse);
-            }
-            else
-            {
-                enemyBody.GetComponent<Rigidbody>().AddForce(0, -force, 0, ForceMode.Impulse);
-            }
-        }
-        else if (moveDir.y != 0)
-        {
-            if (moveDir.y > 0)
-            {
-                enemyBody.GetComponent<Rigidbody>().AddForce(force, 0, 0, ForceMode.Impulse);
-            }
-            else
-            {
-                enemyBody.GetComponent<Rigidbody>().AddForce(-force, 0, 0, ForceMode.Impulse);
-            }
-        }
-        else
-        {
-            enemyBody.GetComponent<Rigidbody>().AddForce(0, 0, force, ForceMode.Impulse);
-        }
-    }
 }
