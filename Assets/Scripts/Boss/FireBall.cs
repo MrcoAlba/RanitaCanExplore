@@ -15,13 +15,13 @@ public class FireBall : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.forward * 6 * Time.deltaTime);
-        transform.localScale += new Vector3(3, 3, 3) * Time.deltaTime;
+        transform.localScale += new Vector3(0.5f, 0.5f, 0.5f) * Time.deltaTime;
         
         cronometro += 1 * Time.deltaTime;
 
         if (cronometro > 1f)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(0.0005f, 0.0005f, 0.0005f);
             gameObject.SetActive(false);
             cronometro = 0;
         }

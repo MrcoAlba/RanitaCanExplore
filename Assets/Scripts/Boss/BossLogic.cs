@@ -57,10 +57,7 @@ public class BossLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fires == true)
-        {
-            Fire_Ball_Skill();
-        }
+        
         //barra.fillAmount = HP_min / HP_max;
         if (HP_min > 0)
         {
@@ -78,104 +75,32 @@ public class BossLogic : MonoBehaviour
     }
     public void Comportamiento()
     {
-        if (Vector3.Distance(transform.position, target.transform.position) < 15)
+        //Seguir Roatción del juagdor
+        var lookPos = target.transform.position - transform.position;
+        lookPos.y = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        //La variable point es de donde salen las Fire balls
+        point.transform.LookAt(target.transform.position);
+        //music.enabled = true;
+
+        if (Vector3.Distance(transform.position, target.transform.position) > 1 && !atacando)
         {
-            var lookPos = target.transform.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            //La variable point es de donde salen las Fire balls
-            point.transform.LookAt(target.transform.position);
-            //music.enabled = true;
-
-            if (Vector3.Distance(transform.position, target.transform.position) > 1 && !atacando)
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+            if (transform.rotation == rotation)
             {
-                switch (rutina)
-                {
-                    case 0:
-                        //Caminar
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                        ani.SetBool("Walk", false);
-                        ani.SetBool("Run", true);
-                        
-                        if (transform.rotation == rotation)
-                        {
-                            Debug.Log("PESO");
-                            transform.Translate(Vector3.forward * speed * Time.deltaTime);
-                        }
-                        ani.SetBool("Attack", false);
-                        cronometro += 1 * Time.deltaTime;
-                        if (cronometro > time_rutinas)
-                        {
-                            rutina = Random.Range(0, 5);
-                            cronometro = 0;
-                        }
-                        break;
-                    case 1:
-                        //Correr
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                        ani.SetBool("Walk", true);
-                        ani.SetBool("Run", false);
-
-                        if (transform.rotation == rotation)
-                        {
-                            transform.Translate(Vector3.forward * speed * 2 * Time.deltaTime);
-                        }
-                        ani.SetBool("Attack", false);
-                        break;
-                    case 2:
-                        //Lanza llamas
-                        ani.SetBool("Walk", false);
-                        ani.SetBool("Run", false);
-                        ani.SetBool("Attack", true);
-                        ani.SetFloat("Skills", 0);
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                        rango.GetComponent<CapsuleCollider>().enabled = false;
-                        break;
-                    case 3:
-                        if (fase == 2)
-                        {
-                            //Ataque de salto
-                            jump_distance += 1 * Time.deltaTime;
-                            ani.SetBool("Walk", false);
-                            ani.SetBool("Run", false);
-                            ani.SetBool("Attack", true);
-                            ani.SetFloat("Skills", 0);
-                            hit_select = 3;
-                            rango.GetComponent<CapsuleCollider>().enabled = false;
-                            if (direction_skill)
-                            {
-                                if (jump_distance < 1f)
-                                {
-                                    transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                                }
-                                transform.Translate(Vector3.forward * 8 * Time.deltaTime);
-                            }
-                        }
-                        else
-                        {
-                            rutina = 0;
-                            cronometro = 0;
-                        }
-                        break;
-                    case 4:
-                        //Fire Ball
-                        if (fase == 2)
-                        {
-                            ani.SetBool("Walk", false);
-                            ani.SetBool("Run", false);
-                            ani.SetBool("Attack", true);
-                            ani.SetFloat("Skills", 0);
-                            rango.GetComponent<CapsuleCollider>().enabled = false;
-                            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 0.5f);
-                        }
-                        else
-                        {
-                            rutina = 0;
-                            cronometro = 0;
-                        }
-                        break;
-                }
+                //transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
+        }
+        
+        if (Vector3.Distance(transform.position, target.transform.position) > 3 && Vector3.Distance(transform.position, target.transform.position) < 5)
+        {
+            ani.SetBool("Melee", false);
+            ani.SetBool("Fire", true);
+        }
+        else if (Vector3.Distance(transform.position, target.transform.position) < 3)
+        {
+            ani.SetBool("Melee", true);
+            ani.SetBool("Fire", false);
         }
         
     }
@@ -200,11 +125,11 @@ public class BossLogic : MonoBehaviour
     //Mele
     public void ColliderWeaponTrue()
     {
-        hit[hit_select].GetComponent<SphereCollider>().enabled = true;
+        hit[0].GetComponent<SphereCollider>().enabled = true;
     }
     public void ColliderWeaponFalse()
     {
-        hit[hit_select].GetComponent<SphereCollider>().enabled = false;
+        hit[0].GetComponent<SphereCollider>().enabled = false;
     }
     //Lanza llamas
     public GameObject GetBala()
