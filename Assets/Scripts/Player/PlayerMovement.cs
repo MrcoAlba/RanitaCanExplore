@@ -276,7 +276,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Battle"))
         {
-            other.GetComponent<StartBossBattle>().StartBattle();
+            other.GetComponent<StartBossBattle>().StartBattle();    
         }
     }
 
