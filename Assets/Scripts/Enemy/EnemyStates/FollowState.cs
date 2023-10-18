@@ -53,7 +53,7 @@ public class FollowState : EnemyState
 
     public override void OnStart()
     {
-        Debug.Log("OnStart FollowState");
+        // Debug.Log("OnStart FollowState");
     }
     public override void OnUpdate()
     {
@@ -64,7 +64,7 @@ public class FollowState : EnemyState
     }
     public override void OnFinish()
     {
-        Debug.Log("OnFinish FollowState");
+        // Debug.Log("OnFinish FollowState");
     }
 
 }

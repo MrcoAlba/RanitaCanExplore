@@ -11,7 +11,7 @@ public class AttackState : EnemyState
 
     public override void OnStart()
     {
-        Debug.Log("OnStart AttackState");
+        // Debug.Log("OnStart AttackState");
         enemyController.Fire();
     }
     public override void OnUpdate()
@@ -20,7 +20,7 @@ public class AttackState : EnemyState
     }
     public override void OnFinish()
     {
-        Debug.Log("OnFinish AttackState");
+        // Debug.Log("OnFinish AttackState");
     }
 
 }

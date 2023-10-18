@@ -37,7 +37,7 @@ public class StoneMovement : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // If there is a collision, destroy the stone
-        Debug.Log("TOCO ALGO LA PIEDRA");
+        // Debug.Log("TOCO ALGO LA PIEDRA");
         DestroyStone();
     }
 
