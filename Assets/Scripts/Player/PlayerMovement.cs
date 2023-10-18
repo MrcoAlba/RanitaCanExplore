@@ -272,5 +272,12 @@ public class PlayerMovement : MonoBehaviour
     public void Damage(float damage){
         playerHealthBar.GetComponent<Slider>().value -= damage;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Battle"))
+        {
+            other.GetComponent<StartBossBattle>().StartBattle();
+        }
+    }
 
 }
