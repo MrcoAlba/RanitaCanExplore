@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private Vector2 moveDir;
 
+    private Vector3 SpawnPoint;
+
     [SerializeField] private GameObject dmgCanvas;
     [SerializeField] private TMP_Text dmgCanvasText;
 
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
         dmgCanvas.SetActive(false);
+        SpawnPoint = transform.position;
     }
 
     // Reference components from other script
@@ -185,6 +188,9 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             isJumping = false;
+        }
+        else if(other.gameObject.CompareTag("Respawn")){
+                this.transform.position = SpawnPoint;
         }
     }
 
