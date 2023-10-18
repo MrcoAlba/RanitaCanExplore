@@ -11293,13 +11293,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3058ea3901330409ba55bb2d0bb72b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 2, y: 0, z: 2}
+  moveSpeed: {x: 2, y: 1, z: 2}
+  jumpSpeed: {x: 1, y: 3, z: 1}
   dmgCanvas: {fileID: 927639350}
   dmgCanvasText: {fileID: 2098752765}
   dmgCanvasTimer: 0
   attackMenuUi: {fileID: 1560324681}
   enemyBody: {fileID: 1838046359}
   enemyHealthBar: {fileID: 1574652369}
+  playerHealthBar: {fileID: 1508910795}
 --- !u!95 &911894316
 Animator:
   serializedVersion: 5
