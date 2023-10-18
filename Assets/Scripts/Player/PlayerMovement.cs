@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,33 +15,88 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private PlayerInput playerInput;
     private Vector2 moveDir;
+    private Vector3 spawnPoint;
 
-    private Vector3 SpawnPoint;
-
+    // Damage related
     [SerializeField] private GameObject dmgCanvas;
     [SerializeField] private TMP_Text dmgCanvasText;
+    public float dmgCanvasTimer = 0f;
 
-    public float dmgCanvasTimer=0f;
-
+    // Attack related
     [SerializeField] private GameObject attackMenuUi;
-    
-
     private int attackDmg = 2;
-
     private int attackOption = 0;
 
+    // Enemy related
     [SerializeField] private GameObject enemyBody;
     [SerializeField] private GameObject enemyHealthBar;
 
+    // Player life related
     [SerializeField] private GameObject playerHealthBar;
 
-    private float pushTimer=0f;
+    private float pushTimer = 0f;
 
-    private bool attacked=false;
+    private bool attacked = false;
 
 
     private bool isJumping;
     #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Reference components from this script
     private void Awake()
@@ -49,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
         dmgCanvas.SetActive(false);
-        SpawnPoint = transform.position;
+        spawnPoint = transform.position;
     }
 
     // Reference components from other script
@@ -62,42 +118,54 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerHealthBar.GetComponent<Slider>().value<=0){
+        // If it's death, kill the player
+        if (playerHealthBar.GetComponent<Slider>().value <= 0)
+        {
             gameObject.SetActive(false);
         }
 
-        if(attackMenuUi.GetComponent<AttackMenuUI>().isMenuOpen==false){
+        // If attackMenu isn't open, the player can move
+        if (attackMenuUi.GetComponent<AttackMenuUI>().isMenuOpen == false)
+        {
             rb.velocity = new Vector3(
-            moveDir.x     * moveSpeed.x,// This is the X axis - moveDir is 2D
+            moveDir.x * moveSpeed.x,// This is the X axis - moveDir is 2D
             rb.velocity.y * moveSpeed.y,// This is the Y axis - keeps gravity
-            moveDir.y     * moveSpeed.z // This is the Z axis - moveDir is 2D
-        );
+            moveDir.y * moveSpeed.z // This is the Z axis - moveDir is 2D
+            );
         }
 
-        attackOption=attackMenuUi.GetComponent<AttackMenuUI>().selection;
 
-        dmgCanvasText.text= "+"+attackDmg.ToString();
+        attackOption = attackMenuUi.GetComponent<AttackMenuUI>().selection;
 
-        Debug.Log(moveDir);
-        
-        if(dmgCanvasTimer>0f){
+        dmgCanvasText.text = "+" + attackDmg.ToString();
+
+        // TODO BIEN
+
+        if (dmgCanvasTimer > 0f)
+        {
             dmgCanvas.SetActive(true);
-            dmgCanvasTimer-=Time.deltaTime;
-        }else{
+            dmgCanvasTimer -= Time.deltaTime;
+        }
+        else
+        {
             dmgCanvas.SetActive(false);
             animator.SetBool("IsAttacking1", false);
             animator.SetBool("IsAttacking2", false);
         }
 
-        if(pushTimer>0f){
+        if (pushTimer > 0f)
+        {
             pushEnemy();
-            pushTimer-=Time.deltaTime;
-        }else{
-            attacked=false;
+            pushTimer -= Time.deltaTime;
+        }
+        else
+        {
+            attacked = false;
         }
     }
 
-    private void OnDialogueStartDelegate(Interaction interaction) {
+    private void OnDialogueStartDelegate(Interaction interaction)
+    {
         playerInput.SwitchCurrentActionMap("Dialogue");
     }
 
@@ -133,17 +201,25 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void OnAttack(InputValue value){
-        if(attackOption==0){
-            dmgCanvasTimer=1f;
-            animator.SetBool("IsAttacking1", true);
-            animator.SetBool("IsAttacking2", false);
-            attackDmg=2;
-        }else{
-            dmgCanvasTimer=1f;
-            animator.SetBool("IsAttacking1", false);
-            animator.SetBool("IsAttacking2", true);
-            attackDmg=4;
+    private void OnAttack(InputValue value)
+    {
+        // TODO JD: Add a cooldown
+        if (dmgCanvasTimer <= 0) 
+        {
+            if (attackOption == 0)
+            {
+                dmgCanvasTimer = 1f;
+                animator.SetBool("IsAttacking1", true);
+                animator.SetBool("IsAttacking2", false);
+                attackDmg = 2;
+            }
+            else
+            {
+                dmgCanvasTimer = 1f;
+                animator.SetBool("IsAttacking1", false);
+                animator.SetBool("IsAttacking2", true);
+                attackDmg = 4;
+            }
         }
     }
 
@@ -154,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector3(
                         moveDir.x * jumpSpeed.y,// This is the X axis - keeps velocity
-                        jumpSpeed.y            ,// This is the Y axis
+                        jumpSpeed.y,// This is the Y axis
                         moveDir.y * jumpSpeed.z // This is the Z axis - keeps velocity
                     );
             isJumping = true;
@@ -171,54 +247,91 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnCollisionEnter(Collision other)
+    {
         Dialogue dialogue = other.collider.transform.GetComponent<Dialogue>();
-        if(dialogue!=null){
+        if (dialogue != null)
+        {
             // Start dialogue
             DialogueManager.Instance.StartDialogue(dialogue);
         }
-        if(other.transform.CompareTag("Enemy") && dmgCanvasTimer>0){
-            enemyBody.GetComponent<EnemyController>().enemyHealthBar-=attackDmg;
-            enemyHealthBar.GetComponent<Slider>().value-=(attackDmg/10f);
-            pushTimer=0.4f;
-        }else if(other.transform.CompareTag("Enemy")){
-            pushTimer=0.4f;
-            attacked=true;
+
+        // TODO JD: Detectar colision en Enemy y bajar la vida desde ahí
+        // Quitar todas las referencias del ENEMY dentro de PLAYER
+        // Poner una referencia del PLAYER dentro del ENEMY
+        if (other.transform.CompareTag("Enemy") && dmgCanvasTimer > 0)
+        {
+            enemyBody.GetComponent<EnemyController>().enemyHealthBar -= attackDmg;
+            enemyHealthBar.GetComponent<Slider>().value -= (attackDmg / 10f);
+            pushTimer = 0.4f;
+        }
+        
+        
+        else if (other.transform.CompareTag("Enemy"))
+        {
+            pushTimer = 0.4f;
+            attacked = false;
         }
         if (other.gameObject.CompareTag("Ground"))
         {
             isJumping = false;
         }
-        else if(other.gameObject.CompareTag("Respawn")){
-                this.transform.position = SpawnPoint;
+        else if (other.gameObject.CompareTag("Respawn"))
+        {
+            this.transform.position = spawnPoint;
         }
     }
 
-    private void pushEnemy(){
-        if(attackOption==0){
-            moveEnemy(3);
-        }else if(attackOption==1){
-            moveEnemy(5);
-        }else if(attacked){
-            moveEnemy(1);
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = true;
         }
     }
 
-    private void moveEnemy(int force){
-            if(moveDir.x!=0){
-                if(moveDir.x>0){
-                    enemyBody.GetComponent<Rigidbody>().AddForce(0,force,0,ForceMode.Impulse);
-                }else{
-                    enemyBody.GetComponent<Rigidbody>().AddForce(0,-force,0,ForceMode.Impulse);
-                }
-            }else if(moveDir.y!=0){
-                if(moveDir.y>0){
-                    enemyBody.GetComponent<Rigidbody>().AddForce(force,0,0,ForceMode.Impulse);
-                }else{
-                    enemyBody.GetComponent<Rigidbody>().AddForce(-force,0,0,ForceMode.Impulse);
-                }
-            }else{
-                enemyBody.GetComponent<Rigidbody>().AddForce(0,0,force,ForceMode.Impulse);
+    private void pushEnemy()
+    {
+        if (attacked)
+        {
+            if (attackOption == 0)
+            {
+                moveEnemy(2);
             }
+            else if (attackOption == 1)
+            {
+                moveEnemy(6);
+            }
+        }
+    }
+
+    private void moveEnemy(int force)
+    {
+        if (moveDir.x != 0)
+        {
+            if (moveDir.x > 0)
+            {
+                enemyBody.GetComponent<Rigidbody>().AddForce(0, force, 0, ForceMode.Impulse);
+            }
+            else
+            {
+                enemyBody.GetComponent<Rigidbody>().AddForce(0, -force, 0, ForceMode.Impulse);
+            }
+        }
+        else if (moveDir.y != 0)
+        {
+            if (moveDir.y > 0)
+            {
+                enemyBody.GetComponent<Rigidbody>().AddForce(force, 0, 0, ForceMode.Impulse);
+            }
+            else
+            {
+                enemyBody.GetComponent<Rigidbody>().AddForce(-force, 0, 0, ForceMode.Impulse);
+            }
+        }
+        else
+        {
+            enemyBody.GetComponent<Rigidbody>().AddForce(0, 0, force, ForceMode.Impulse);
+        }
     }
 }
