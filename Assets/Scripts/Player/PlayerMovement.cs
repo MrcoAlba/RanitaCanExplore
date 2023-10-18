@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool attacked = false;
 
-
+    public GameObject ShootPoint;
     private bool isJumping;
     #endregion
 
@@ -116,7 +116,9 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RotateShootPoint();
         // If it's death, kill the player
+        
         if (playerHealthBar.GetComponent<Slider>().value <= 0)
         {
             gameObject.SetActive(false);
@@ -279,5 +281,23 @@ public class PlayerMovement : MonoBehaviour
             other.GetComponent<StartBossBattle>().StartBattle();    
         }
     }
-
+    public void RotateShootPoint()
+    {
+        if (moveDir.x == -1)
+        {
+            ShootPoint.transform.Rotate(0, -90, 0);
+        }
+        else if (moveDir.x == 1)
+        {
+            ShootPoint.transform.Rotate(0, 90, 0);
+        }
+        if (moveDir.y == -1)
+        {
+            ShootPoint.transform.Rotate(0, -180, 0);
+        }
+        else if (moveDir.y == 1)
+        {
+            ShootPoint.transform.Rotate(0, 0, 0);
+        }
+    }
 }
