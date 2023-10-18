@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class BossLogic : MonoBehaviour
 {
+
     [Header("Lamzallamas")]
     public bool lanza_llamas;
     public List<GameObject> pool = new List<GameObject>();
     public GameObject fire;
     public GameObject cabeza;
     private float cronometro2;
-
 
     [Header("Jump Attack")]
     public float jump_distance;
@@ -48,6 +48,9 @@ public class BossLogic : MonoBehaviour
     public GameObject[] hit;
     public int hit_select;
     public bool fires = false;
+    [SerializeField] private GameObject healthBar;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +61,16 @@ public class BossLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (healthBar.GetComponent<Slider>().value <= 0.01)
+        {
+            // Debug.Log("HOLI ESTOY AQUI");
+            gameObject.SetActive(false);
+        }
+        else{
+            Debug.Log("VIDA ENEMIGO:" + healthBar.GetComponent<Slider>().value);
+        }
+
         if (EmpezarAtacar == true)
         {
             if (HP_min > 0)
@@ -79,7 +92,7 @@ public class BossLogic : MonoBehaviour
     }
     public void Comportamiento()
     {
-        //Seguir Roatción del juagdor
+        //Seguir Roatciï¿½n del juagdor
         var lookPos = target.transform.position - transform.position;
         lookPos.y = 0;
         var rotation = Quaternion.LookRotation(lookPos);
@@ -227,6 +240,16 @@ public class BossLogic : MonoBehaviour
         if (lanza_llamas)
         {
             LanzaLlamas_Skill();
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.transform.CompareTag("Player"))
+        {
+            if(other.transform.GetComponent<PlayerMovement>().dmgCanvasTimer > 0){
+                healthBar.GetComponent<Slider>().value -= 0.2f;
+            }
         }
     }
 }

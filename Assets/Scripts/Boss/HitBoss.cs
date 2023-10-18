@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class HitBoss : MonoBehaviour
 {
-    public int damamge;
+    public float damamge;
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider    other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             //Quiatr Vida al juagdor
-            Debug.Log("Aqui se debe quitar la vida al jugador");
+            // Debug.Log("Aqui se debe quitar la vida al jugador");
+            other.transform.GetComponent<PlayerMovement>().Damage(damamge);
         }
     }
     void Start()

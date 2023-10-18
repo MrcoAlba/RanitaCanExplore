@@ -50,13 +50,13 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         
-        if (healthBar.GetComponent<Slider>().value <= 0.1)
+        if (healthBar.GetComponent<Slider>().value <= 0.01)
         {
-            Debug.Log("HOLI ESTOY AQUI");
+            // Debug.Log("HOLI ESTOY AQUI");
             gameObject.SetActive(false);
         }
         else{
-            Debug.Log("HOLI ADIOS:" + healthBar.GetComponent<Slider>().value);
+            // Debug.Log("HOLI ADIOS:" + healthBar.GetComponent<Slider>().value);
         }
 
 

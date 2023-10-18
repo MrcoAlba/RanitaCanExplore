@@ -216,7 +216,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJumping()
     {
-        Debug.Log("HOLI, SALTO :)");
+        // Debug.Log("HOLI, SALTO :)");
         if (!isJumping)
         {
             rb.velocity = new Vector3(
@@ -249,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.transform.CompareTag("Enemy") && dmgCanvasTimer <= 0)
         {
-            playerHealthBar.GetComponent<Slider>().value -= 0.2f;
+            Damage(0.1f);
         }
         if (other.gameObject.CompareTag("Ground"))
         {
@@ -269,5 +269,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void Damage(float damage){
+        playerHealthBar.GetComponent<Slider>().value -= damage;
+    }
 
 }

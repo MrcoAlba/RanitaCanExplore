@@ -35,7 +35,7 @@ public class IdleState : EnemyState
 
     public override void OnStart()
     {
-        Debug.Log("OnStart IdleState");
+        // Debug.Log("OnStart IdleState");
         enemyController.rb.velocity = Vector3.zero;
     }
     public override void OnUpdate()
@@ -44,7 +44,7 @@ public class IdleState : EnemyState
     }
     public override void OnFinish()
     {
-        Debug.Log("OnFinish IdleState");
+        // Debug.Log("OnFinish IdleState");
     }
 
 }
