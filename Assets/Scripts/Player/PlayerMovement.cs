@@ -263,6 +263,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+        }
+    }
+
     void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))
