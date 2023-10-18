@@ -132,4 +132,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e3414d4a018b548a1cca3191ff6e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damamge: 0.1
+  damamge: 0.05
