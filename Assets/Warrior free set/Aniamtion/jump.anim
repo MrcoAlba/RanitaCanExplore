@@ -58,8 +58,24 @@ AnimationClip:
       value: {fileID: 806391716420303315, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     - time: 1.6
       value: {fileID: -7703501868747715773, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 1.7
+      value: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     - time: 1.8
+      value: {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 1.9
       value: {fileID: -4486162353907066099, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2
+      value: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2.1
+      value: {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2.2
+      value: {fileID: -4486162353907066099, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2.3
+      value: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2.4
+      value: {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - time: 2.5
+      value: {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -101,13 +117,21 @@ AnimationClip:
     - {fileID: -5853263684127566195, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     - {fileID: 806391716420303315, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     - {fileID: -7703501868747715773, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
     - {fileID: -4486162353907066099, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -4486162353907066099, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -1938354968663525734, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
+    - {fileID: -3318188226485093758, guid: ae72133dacba6ec4eb33ecde48f50e56, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.9
+    m_StopTime: 2.6
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -134,7 +158,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.6
+  - time: 1
     functionName: ColliderWeaponTrue
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -155,7 +179,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.8
+  - time: 2.5
     functionName: Final_ani
     data: 
     objectReferenceParameter: {fileID: 0}
