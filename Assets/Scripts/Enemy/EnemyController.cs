@@ -97,8 +97,15 @@ public class EnemyController : MonoBehaviour
             healthBar.GetComponent<Slider>().value -= 0.2f;
             pushEnemy();
         }
+        
     }
-
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Bullet"))
+        {
+            healthBar.GetComponent<Slider>().value -= 0.4f;
+        }
+    }
 
 
     private void pushEnemy()

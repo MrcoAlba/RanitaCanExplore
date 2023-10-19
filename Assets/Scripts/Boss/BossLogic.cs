@@ -50,7 +50,7 @@ public class BossLogic : MonoBehaviour
     public bool fires = false;
     [SerializeField] private GameObject healthBar;
     public Animator WarriorAnim;
-
+    public StartBossBattle StartBoss;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +66,9 @@ public class BossLogic : MonoBehaviour
         if (healthBar.GetComponent<Slider>().value <= 0.01)
         {
             // Debug.Log("HOLI ESTOY AQUI");
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            WarriorAnim.SetTrigger("Die");
+            StartBoss.FinishBattle();
         }
         else{
             Debug.Log("VIDA ENEMIGO:" + healthBar.GetComponent<Slider>().value);

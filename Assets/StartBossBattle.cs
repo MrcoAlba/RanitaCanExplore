@@ -21,4 +21,8 @@ public class StartBossBattle : MonoBehaviour
         Boss.EmpezarAtacar = true;
         Colliders.gameObject.SetActive(true);
     }
+    public void FinishBattle()
+    {
+        Colliders.gameObject.SetActive(false);
+    }
 }
