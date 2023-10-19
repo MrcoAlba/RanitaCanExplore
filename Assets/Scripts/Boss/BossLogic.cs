@@ -49,6 +49,7 @@ public class BossLogic : MonoBehaviour
     public int hit_select;
     public bool fires = false;
     [SerializeField] private GameObject healthBar;
+    public Animator WarriorAnim;
 
 
     // Start is called before the first frame update
@@ -109,40 +110,56 @@ public class BossLogic : MonoBehaviour
         if (Vector3.Distance(transform.position, target.transform.position) > 1.5f && Vector3.Distance(transform.position, target.transform.position) < 3)
         {
             ani.SetBool("Melee", false);
-            //ani.SetBool("Fire", true);
             ani.SetBool("Attack", false);
             ani.SetTrigger("Fire");
             ani.ResetTrigger("FireOut");
+
+            WarriorAnim.SetBool("Melee", false);
+            WarriorAnim.SetBool("Attack", false);
+            WarriorAnim.SetTrigger("Fire");
+            WarriorAnim.ResetTrigger("FireOut");
         }
         else if (Vector3.Distance(transform.position, target.transform.position) < 1.5f)
         {
             ani.SetBool("Melee", true);
-            //ani.SetBool("Fire", false);
             ani.SetBool("Attack", false);
             ani.ResetTrigger("Fire");
             ani.SetTrigger("FireOut");
+
+
+            WarriorAnim.SetBool("Melee", true);
+            WarriorAnim.SetBool("Attack", false);
+            WarriorAnim.ResetTrigger("Fire");
+            WarriorAnim.SetTrigger("FireOut");
+
             Stop_Fire();
         }
         else if (Vector3.Distance(transform.position, target.transform.position) > 3 && Vector3.Distance(transform.position, target.transform.position) < 5)
         {
-            //ani.SetBool("Fire", false);
             ani.ResetTrigger("Fire");
-            ani.SetTrigger("FireOut");
-            Stop_Fire();
+            ani.SetTrigger("FireOut");     
             ani.SetBool("Melee", false);
             ani.SetBool("Attack", true);
+
+            WarriorAnim.ResetTrigger("Fire");
+            WarriorAnim.SetTrigger("FireOut");
+            WarriorAnim.SetBool("Melee", false);
+            WarriorAnim.SetBool("Attack", true);
+
+            Stop_Fire();
         }
         else if (Vector3.Distance(transform.position, target.transform.position) > 5)
         {
-            //ani.SetBool("Fire", false);
             ani.ResetTrigger("Fire");
             ani.SetTrigger("FireOut");
             ani.SetBool("Melee", false);
             ani.SetBool("Attack", false);
-            /*if (transform.rotation == rotation)
-            {
-                transform.Translate(Vector3.forward * speed * Time.deltaTime);
-            }*/
+
+
+            WarriorAnim.ResetTrigger("Fire");
+            WarriorAnim.SetTrigger("FireOut");
+            WarriorAnim.SetBool("Melee", false);
+            WarriorAnim.SetBool("Attack", false);
 
         }
         
