@@ -66,7 +66,7 @@ public class BossLogic : MonoBehaviour
         if (healthBar.GetComponent<Slider>().value <= 0.01)
         {
             // Debug.Log("HOLI ESTOY AQUI");
-            //gameObject.SetActive(false);
+            gameObject.SetActive(false);
             WarriorAnim.SetTrigger("Die");
             StartBoss.FinishBattle();
         }
