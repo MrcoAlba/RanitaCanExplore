@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject ShootPoint;
     private bool isJumping;
+    public float ToRotate;
     #endregion
 
 
@@ -124,7 +125,9 @@ public class PlayerMovement : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-
+        Setlast();
+        RotateShootPoint();
+        ShootPoint.transform.Rotate(0, ShootPoint.transform.rotation.x * ToRotate, 0);
         // If attackMenu isn't open, the player can move
         if (attackMenuUi.GetComponent<AttackMenuUI>().isMenuOpen == false)
         {
@@ -169,6 +172,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnMovement(InputValue value)
     {
         moveDir = value.Get<Vector2>();
+
         // if moveDir isn't normalize, when you move up and right,
         // the velocity will be 1 for Y and 1 for X.
         moveDir.Normalize();
@@ -293,21 +297,20 @@ public class PlayerMovement : MonoBehaviour
     }
     public void RotateShootPoint()
     {
-        if (moveDir.x == -1)
+        if (lastMoveDir.x == -1)
         {
-            ShootPoint.transform.Rotate(0, -90, 0);
+            ToRotate = -1;
         }
-        else if (moveDir.x == 1)
+        else if (lastMoveDir.x == 1)
         {
-            ShootPoint.transform.Rotate(0, 90, 0);
+            ToRotate = 1;
         }
-        if (moveDir.y == -1)
+    }
+    public void Setlast()
+    {
+        if (moveDir.x != 0)
         {
-            ShootPoint.transform.Rotate(0, -180, 0);
-        }
-        else if (moveDir.y == 1)
-        {
-            ShootPoint.transform.Rotate(0, 0, 0);
+            lastMoveDir.x = moveDir.x;
         }
     }
 }
